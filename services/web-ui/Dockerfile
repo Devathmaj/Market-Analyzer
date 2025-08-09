@@ -1,19 +1,36 @@
-# Use an official Python runtime as a parent image
+# Stage 1: Build the React frontend
+FROM node:18-alpine AS build
+
+WORKDIR /app/client
+
+# Copy client source code and package files
+COPY client/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the client source code
+COPY client/ .
+
+# Build the React app
+RUN npm run build
+
+# Stage 2: Build the Python backend
 FROM python:3.9-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
+# Copy Python server requirements and install dependencies
 COPY server/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application's code
-COPY ./server /app/server
+# Copy the built frontend from the build stage
+COPY --from=build /app/client/dist /app/static
 
-# Expose the port the app runs on
-EXPOSE 8080
+# Copy the Python server code
+COPY server /app/server
 
-# Command to run the application using Gunicorn with Uvicorn workers
-# This is a production-ready setup
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080", "server.main:app"]
+EXPOSE 5000
+
+# Run the FastAPI server with Gunicorn
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:5000", "server.main:app"]

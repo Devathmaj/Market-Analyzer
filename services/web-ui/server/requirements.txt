@@ -4,3 +4,5 @@ python-dotenv
 requests
 jinja2
 aiofiles
+gunicorn
+httpx

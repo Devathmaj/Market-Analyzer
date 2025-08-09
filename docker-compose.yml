@@ -31,4 +31,5 @@ services:
       - api-gateway
     ports:
       # Expose port 8080 on the host machine to access the web dashboard.
-      - "8080:8080"
+      # Expose port 5000 on the host machine to access the web dashboard.
+      - "5000:5000"
