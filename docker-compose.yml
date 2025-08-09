@@ -1,0 +1,34 @@
+version: '3.8'
+
+# This Docker Compose file sets up the local development environment.
+# It defines the services that make up the application, allowing them
+# to be run together in isolated containers.
+
+services:
+  # The API Gateway is responsible for fetching data from external sources.
+  # It provides a clean, internal API for other services.
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+    # The 'env_file' loads sensitive credentials from a dedicated .env file,
+    # keeping them isolated to this service.
+    env_file:
+      - ./services/api-gateway/.env
+    # We don't expose ports for the gateway to the host machine,
+    # as it should only be accessible from other services within the Docker network.
+    # For debugging, you could expose it:
+    # ports:
+    #   - "8000:8000"
+
+  # The Web UI is the user-facing dashboard.
+  # It calls the api-gateway to get its data.
+  web-ui:
+    build:
+      context: ./services/web-ui
+    # This service depends on the api-gateway. 'depends_on' ensures that
+    # the api-gateway is started before the web-ui.
+    depends_on:
+      - api-gateway
+    ports:
+      # Expose port 8080 on the host machine to access the web dashboard.
+      - "8080:8080"

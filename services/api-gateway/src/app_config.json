@@ -1,0 +1,14 @@
+{
+  "default_tickers": [
+    "AAPL",
+    "MSFT",
+    "GOOG"
+  ],
+  "news_page_size": 5,
+  "news_sort_by": "popularity",
+  "preferred_news_sources": [
+    "Reuters",
+    "Bloomberg",
+    "Associated Press"
+  ]
+}
