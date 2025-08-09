@@ -1,0 +1,41 @@
+{
+  "sentiment": {
+    "positive": 65,
+    "negative": 20,
+    "neutral": 15
+  },
+  "trendingStocks": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "mentions": 1245,
+      "sentiment": 0.75
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "mentions": 987,
+      "sentiment": -0.32
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "mentions": 654,
+      "sentiment": 0.45
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corp.",
+      "mentions": 543,
+      "sentiment": 0.68
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc.",
+      "mentions": 432,
+      "sentiment": 0.23
+    }
+  ],
+  "marketVolatility": 18.5,
+  "fearGreedIndex": 72
+}

@@ -1,0 +1,72 @@
+{
+  "stocks": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "price": 182.52,
+      "change": 2.45,
+      "changePercent": 1.36,
+      "volume": 45234567,
+      "marketCap": 2876543210000
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "price": 138.21,
+      "change": -1.23,
+      "changePercent": -0.88,
+      "volume": 23456789,
+      "marketCap": 1743210000000
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "price": 384.30,
+      "change": 5.67,
+      "changePercent": 1.50,
+      "volume": 34567890,
+      "marketCap": 2854321000000
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "price": 219.88,
+      "change": -12.34,
+      "changePercent": -5.32,
+      "volume": 78901234,
+      "marketCap": 698765430000
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc.",
+      "price": 151.94,
+      "change": 3.21,
+      "changePercent": 2.16,
+      "volume": 56789012,
+      "marketCap": 1587654320000
+    }
+  ],
+  "indices": [
+    {
+      "name": "S&P 500",
+      "symbol": "SPX",
+      "value": 4567.89,
+      "change": 23.45,
+      "changePercent": 0.52
+    },
+    {
+      "name": "NASDAQ",
+      "symbol": "IXIC",
+      "value": 14321.67,
+      "change": -45.32,
+      "changePercent": -0.32
+    },
+    {
+      "name": "Dow Jones",
+      "symbol": "DJI",
+      "value": 34567.12,
+      "change": 156.78,
+      "changePercent": 0.46
+    }
+  ]
+}

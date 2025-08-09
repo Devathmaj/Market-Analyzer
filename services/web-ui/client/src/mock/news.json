@@ -1,0 +1,44 @@
+{
+  "articles": [
+    {
+      "id": "1",
+      "title": "Apple Reports Record Q4 Earnings",
+      "summary": "Apple Inc. reported record quarterly earnings driven by strong iPhone sales and services growth.",
+      "content": "Apple Inc. today announced financial results for its fiscal 2024 fourth quarter ended September 28, 2024. The Company posted quarterly revenue of $94.9 billion, up 6 percent year over year, and quarterly earnings per diluted share of $1.64, up 12 percent year over year.",
+      "source": "MarketWatch",
+      "publishedAt": "2024-01-15T10:30:00Z",
+      "imageUrl": "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+      "sentiment": "positive"
+    },
+    {
+      "id": "2",
+      "title": "Tesla Stock Drops on Production Concerns",
+      "summary": "Tesla shares fell 5% in after-hours trading following reports of production delays at its Shanghai facility.",
+      "content": "Tesla Inc. shares declined in extended trading after reports surfaced about potential production delays at the company's Shanghai Gigafactory. The electric vehicle manufacturer faces supply chain challenges that could impact Q1 delivery targets.",
+      "source": "Reuters",
+      "publishedAt": "2024-01-15T14:45:00Z",
+      "imageUrl": "https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg",
+      "sentiment": "negative"
+    },
+    {
+      "id": "3",
+      "title": "Federal Reserve Signals Rate Cut Possibility",
+      "summary": "Fed officials hint at potential interest rate cuts in 2024 as inflation shows signs of cooling.",
+      "content": "Federal Reserve officials indicated during recent speeches that interest rate cuts could be on the table for 2024 if inflation continues its downward trend. This shift in monetary policy stance has sparked optimism among investors.",
+      "source": "Financial Times",
+      "publishedAt": "2024-01-15T16:20:00Z",
+      "imageUrl": "https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg",
+      "sentiment": "positive"
+    },
+    {
+      "id": "4",
+      "title": "Tech Giants Lead Market Rally",
+      "summary": "Major technology stocks surged today as investors showed renewed confidence in the sector.",
+      "content": "Technology stocks led a broad market rally today, with the NASDAQ composite gaining over 2%. Investors appear to be rotating back into growth stocks amid expectations of a more dovish Federal Reserve stance.",
+      "source": "Bloomberg",
+      "publishedAt": "2024-01-15T18:00:00Z",
+      "imageUrl": "https://images.pexels.com/photos/159888/pexels-photo-159888.jpeg",
+      "sentiment": "positive"
+    }
+  ]
+}

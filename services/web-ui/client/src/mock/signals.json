@@ -1,0 +1,49 @@
+{
+  "signals": [
+    {
+      "id": "1",
+      "symbol": "AAPL",
+      "signal": "buy",
+      "confidence": 87,
+      "timestamp": "2024-01-15T09:30:00Z",
+      "price": 182.52,
+      "reasoning": "Strong earnings report and positive analyst sentiment"
+    },
+    {
+      "id": "2",
+      "symbol": "TSLA",
+      "signal": "sell",
+      "confidence": 73,
+      "timestamp": "2024-01-15T10:15:00Z",
+      "price": 219.88,
+      "reasoning": "Production concerns and declining delivery estimates"
+    },
+    {
+      "id": "3",
+      "symbol": "GOOGL",
+      "signal": "hold",
+      "confidence": 65,
+      "timestamp": "2024-01-15T11:00:00Z",
+      "price": 138.21,
+      "reasoning": "Mixed signals from technical indicators"
+    },
+    {
+      "id": "4",
+      "symbol": "MSFT",
+      "signal": "buy",
+      "confidence": 91,
+      "timestamp": "2024-01-15T12:30:00Z",
+      "price": 384.30,
+      "reasoning": "Cloud growth acceleration and AI integration benefits"
+    },
+    {
+      "id": "5",
+      "symbol": "AMZN",
+      "signal": "buy",
+      "confidence": 79,
+      "timestamp": "2024-01-15T13:45:00Z",
+      "price": 151.94,
+      "reasoning": "AWS margin expansion and retail recovery"
+    }
+  ]
+}
