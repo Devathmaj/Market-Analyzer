@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Search, User, Bell, Menu } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -10,7 +9,6 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { settings } = useAppContext();
 
   useEffect(() => {
     const timer = setInterval(() => {

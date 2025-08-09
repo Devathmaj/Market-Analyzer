@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Stock } from '../types';
-import { fetchStockData } from '../services/api';
+import { getStockData } from '../services/api';
 
 const StockTicker: React.FC = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
@@ -8,7 +8,7 @@ const StockTicker: React.FC = () => {
   useEffect(() => {
     const loadStocks = async () => {
       try {
-        const data = await fetchStockData();
+        const data = await getStockData();
         setStocks(data.stocks);
       } catch (error) {
         console.error('Failed to load stocks:', error);

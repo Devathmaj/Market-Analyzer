@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Heart, AlertTriangle } from 'lucide-react';
 import { AnalyticsData } from '../types';
-import { fetchAnalyticsData } from '../services/api';
+import { getAnalyticsData } from '../services/api';
 import { useAppContext } from '../context/AppContext';
 import Card from '../components/Card';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
@@ -14,7 +14,7 @@ const Analytics: React.FC = () => {
     const loadAnalytics = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchAnalyticsData();
+        const data = await getAnalyticsData();
         setAnalytics(data);
       } catch (error) {
         console.error('Failed to load analytics:', error);

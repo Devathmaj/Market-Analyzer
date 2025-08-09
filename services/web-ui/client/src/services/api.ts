@@ -1,85 +1,45 @@
-import stocksData from '../mock/stocks.json';
-import stockHistoryData from '../mock/stockHistory.json';
-import newsData from '../mock/news.json';
-import analyticsData from '../mock/analytics.json';
-import signalsData from '../mock/signals.json';
 import { Stock, StockHistory, NewsArticle, MarketIndex, TradingSignal, AnalyticsData, UserSettings } from '../types';
 
-/**
- * Fetches current stock data including prices and market indices
- * Backend endpoint: GET /api/stocks
- * @returns Promise<{stocks: Stock[], indices: MarketIndex[]}>
- */
-export const fetchStockData = async (): Promise<{stocks: Stock[], indices: MarketIndex[]}> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  return {
-    stocks: stocksData.stocks as Stock[],
-    indices: stocksData.indices as MarketIndex[]
-  };
-};
+const API_BASE_URL = '/api';
 
-/**
- * Fetches historical price data for a specific stock symbol
- * Backend endpoint: GET /api/stocks/{symbol}/history
- * @param symbol - Stock symbol (e.g., "AAPL")
- * @returns Promise<StockHistory[]>
- */
-export const fetchStockHistory = async (symbol: string): Promise<StockHistory[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  // Type assertion needed due to JSON import limitations
-  const historyData = stockHistoryData as Record<string, StockHistory[]>;
-  return historyData[symbol] || [];
-};
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+  }
+  return response.json() as Promise<T>;
+}
 
-/**
- * Fetches latest market news articles
- * Backend endpoint: GET /api/news
- * @returns Promise<NewsArticle[]>
- */
-export const fetchMarketNews = async (): Promise<NewsArticle[]> => {
-  await new Promise(resolve => setTimeout(resolve, 400));
-  
-  return newsData.articles as NewsArticle[];
-};
+export async function getStockData(): Promise<{ stocks: Stock[]; indices: MarketIndex[] }> {
+  const response = await fetch(`${API_BASE_URL}/stocks`);
+  return handleResponse<{ stocks: Stock[]; indices: MarketIndex[] }>(response);
+}
 
-/**
- * Fetches market analytics data including sentiment and trending stocks
- * Backend endpoint: GET /api/analytics
- * @returns Promise<AnalyticsData>
- */
-export const fetchAnalyticsData = async (): Promise<AnalyticsData> => {
-  await new Promise(resolve => setTimeout(resolve, 600));
-  
-  return analyticsData as AnalyticsData;
-};
+export async function getStockHistory(symbol: string): Promise<StockHistory[]> {
+  const response = await fetch(`${API_BASE_URL}/stocks/${symbol}/history`);
+  return handleResponse<StockHistory[]>(response);
+}
 
-/**
- * Fetches trading signals with buy/sell/hold recommendations
- * Backend endpoint: GET /api/signals
- * @returns Promise<TradingSignal[]>
- */
-export const fetchTradingSignals = async (): Promise<TradingSignal[]> => {
-  await new Promise(resolve => setTimeout(resolve, 350));
-  
-  return signalsData.signals as TradingSignal[];
-};
+export async function getMarketNews(): Promise<NewsArticle[]> {
+  const response = await fetch(`${API_BASE_URL}/news`);
+  return handleResponse<NewsArticle[]>(response);
+}
 
-/**
- * Updates user settings
- * Backend endpoint: PUT /api/user/settings
- * @param settings - Partial user settings to update
- * @returns Promise<UserSettings>
- */
-export const updateUserSettings = async (settings: Partial<UserSettings>): Promise<UserSettings> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
-  
-  // In real implementation, this would update the backend and return the updated settings
-  const currentSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-  const updatedSettings = { ...currentSettings, ...settings };
-  localStorage.setItem('userSettings', JSON.stringify(updatedSettings));
-  
-  return updatedSettings as UserSettings;
-};
+export async function getAnalyticsData(): Promise<AnalyticsData> {
+  const response = await fetch(`${API_BASE_URL}/analytics`);
+  return handleResponse<AnalyticsData>(response);
+}
+
+export async function getTradingSignals(): Promise<TradingSignal[]> {
+  const response = await fetch(`${API_BASE_URL}/signals`);
+  return handleResponse<TradingSignal[]>(response);
+}
+
+export async function updateUserSettings(settings: Partial<UserSettings>): Promise<UserSettings> {
+  const response = await fetch(`${API_BASE_URL}/user/settings`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings),
+  });
+  return handleResponse<UserSettings>(response);
+}

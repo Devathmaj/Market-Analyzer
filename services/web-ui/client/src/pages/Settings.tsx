@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Save, Moon, Sun, Key, Bell, TrendingUp } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import Card from '../components/Card';
+import { UserSettings } from '../types';
 
 const Settings: React.FC = () => {
   const { settings, updateSettings } = useAppContext();
@@ -16,7 +17,7 @@ const Settings: React.FC = () => {
 
   const handleThemeToggle = () => {
     const newTheme = localSettings.theme === 'light' ? 'dark' : 'light';
-    const updatedSettings = { ...localSettings, theme: newTheme };
+    const updatedSettings: UserSettings = { ...localSettings, theme: newTheme };
     setLocalSettings(updatedSettings);
     updateSettings(updatedSettings); // Apply immediately for better UX
   };

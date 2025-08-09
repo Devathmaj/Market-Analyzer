@@ -1,21 +1,21 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { StockHistory } from '../types';
+import { TooltipProps } from 'recharts';
 
 interface ChartProps {
   data: StockHistory[];
-  symbol: string;
 }
 
-const Chart: React.FC<ChartProps> = ({ data, symbol }) => {
+const Chart: React.FC<ChartProps> = ({ data }) => {
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
+  const formatPrice = (price: number) => `${price.toFixed(2)}`;
 
-  const customTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -48,7 +48,7 @@ const Chart: React.FC<ChartProps> = ({ data, symbol }) => {
             stroke="#6B7280"
             fontSize={12}
           />
-          <Tooltip content={customTooltip} />
+          <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
             dataKey="close"

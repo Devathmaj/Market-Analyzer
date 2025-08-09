@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, ExternalLink } from 'lucide-react';
 import { NewsArticle } from '../types';
-import { fetchMarketNews } from '../services/api';
+import { getMarketNews } from '../services/api';
 import { useAppContext } from '../context/AppContext';
 import Card from '../components/Card';
 import Modal from '../components/Modal';
@@ -16,7 +16,7 @@ const NewsFeed: React.FC = () => {
     const loadNews = async () => {
       setIsLoading(true);
       try {
-        const newsData = await fetchMarketNews();
+        const newsData = await getMarketNews();
         setArticles(newsData);
       } catch (error) {
         console.error('Failed to load news:', error);

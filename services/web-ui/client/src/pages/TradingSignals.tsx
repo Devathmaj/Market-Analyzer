@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUp, ArrowDown, Minus, Clock } from 'lucide-react';
 import { TradingSignal } from '../types';
-import { fetchTradingSignals } from '../services/api';
+import { getTradingSignals } from '../services/api';
 import { useAppContext } from '../context/AppContext';
 import Card from '../components/Card';
 
@@ -14,7 +14,7 @@ const TradingSignals: React.FC = () => {
     const loadSignals = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchTradingSignals();
+        const data = await getTradingSignals();
         setSignals(data);
       } catch (error) {
         console.error('Failed to load signals:', error);

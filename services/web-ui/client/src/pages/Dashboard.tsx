@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { Stock, MarketIndex, StockHistory } from '../types';
-import { fetchStockData, fetchStockHistory } from '../services/api';
+import { getStockData, getStockHistory } from '../services/api';
 import Card from '../components/Card';
 import Chart from '../components/Chart';
 import StockTicker from '../components/StockTicker';
@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchStockData();
+        const data = await getStockData();
         setStocks(data.stocks);
         setIndices(data.indices);
       } catch (error) {
@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
     const loadStockHistory = async () => {
       if (selectedStock) {
         try {
-          const history = await fetchStockHistory(selectedStock);
+          const history = await getStockHistory(selectedStock);
           setStockHistory(history);
         } catch (error) {
           console.error('Failed to load stock history:', error);
@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
               ))}
             </select>
           </div>
-          <Chart data={stockHistory} symbol={selectedStock} />
+          <Chart data={stockHistory} />
         </Card>
 
         {/* Top Stocks */}
