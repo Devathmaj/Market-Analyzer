@@ -35,7 +35,7 @@ const Settings: React.FC = () => {
   const removePreferredStock = (stock: string) => {
     setLocalSettings({
       ...localSettings,
-      preferredStocks: localSettings.preferredStocks.filter(s => s !== stock)
+      preferredStocks: localSettings.preferredStocks.filter((s: string) => s !== stock)
     });
   };
 
@@ -115,14 +115,14 @@ const Settings: React.FC = () => {
                 </div>
               </div>
               <button
-                onClick={() => setLocalSettings({ ...localSettings, notifications: !localSettings.notifications })}
+                onClick={() => setLocalSettings({ ...localSettings, notifications: { ...localSettings.notifications, priceAlerts: !localSettings.notifications.priceAlerts } })}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  localSettings.notifications ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-600'
+                  localSettings.notifications.priceAlerts ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-600'
                 }`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    localSettings.notifications ? 'translate-x-6' : 'translate-x-1'
+                    localSettings.notifications.priceAlerts ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
               </button>
@@ -160,7 +160,7 @@ const Settings: React.FC = () => {
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Current Preferred Stocks:</h4>
               <div className="flex flex-wrap gap-2">
-                {localSettings.preferredStocks.map((stock) => (
+                {localSettings.preferredStocks.map((stock: string) => (
                   <span
                     key={stock}
                     className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300"

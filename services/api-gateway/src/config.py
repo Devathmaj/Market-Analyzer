@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Define the path to the JSON configuration file
+BASE_DIR = Path(__file__).parent.parent  # /project/services/api-gateway
 CONFIG_FILE_PATH = Path(__file__).parent / "app_config.json"
 
 class AppConfig:
@@ -14,20 +14,49 @@ class AppConfig:
                 self._config_data = json.load(f)
 
     def get(self, key: str, default=None):
-        """Fetches a value from the config data."""
         return self._config_data.get(key, default)
 
+
 class SecretConfig(BaseSettings):
-    """Loads sensitive information from environment variables."""
+    """Sensitive settings from environment variables."""
     STOCK_API_KEY: str
     NEWS_API_KEY: str
 
+    # DB credentials from .env
+    DB_HOST: str
+    DB_PORT: int = 5432
+    DB_NAME: str
+    DB_USER: str
+    DB_PASSWORD: str
+
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=BASE_DIR / ".env",
         env_file_encoding='utf-8',
         extra='ignore'
     )
 
-# Instantiate the configuration objects for use in other modules
+
+class FileConfig:
+    """Loads values from text files."""
+    COMPANY_FILE_PATH = BASE_DIR / "company_names.txt"
+    NEWS_FILE_PATH = BASE_DIR / "news_category.txt"
+
+    @property
+    def company_list(self):
+        if self.COMPANY_FILE_PATH.exists():
+            with open(self.COMPANY_FILE_PATH, "r") as f:
+                return [line.strip() for line in f if line.strip()]
+        return []
+
+    @property
+    def news_categories(self):
+        if self.NEWS_FILE_PATH.exists():
+            with open(self.NEWS_FILE_PATH, "r") as f:
+                return [line.strip() for line in f if line.strip()]
+        return []
+
+
+# Instantiate config objects
 secrets = SecretConfig()
 app_config = AppConfig(CONFIG_FILE_PATH)
+files = FileConfig()

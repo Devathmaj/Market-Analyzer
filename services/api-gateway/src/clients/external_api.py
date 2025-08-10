@@ -39,3 +39,36 @@ async def fetch_news_articles(keyword: str):
             raise HTTPException(status_code=e.response.status_code, detail=f"Error from NewsAPI: {e.response.text}")
         except httpx.RequestError as e:
             raise HTTPException(status_code=503, detail=f"Network error while contacting NewsAPI: {e}")
+
+async def fetch_stock_history(ticker: str, resolution: str, from_ts: int, to_ts: int):
+    """Fetches historical stock data from the Finnhub API."""
+    url = f"{FINNHUB_BASE_URL}/stock/candle"
+    params = {
+        "symbol": ticker,
+        "resolution": resolution,
+        "from": from_ts,
+        "to": to_ts,
+        "token": secrets.STOCK_API_KEY
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, params=params)
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(status_code=e.response.status_code, detail=f"Error from Finnhub API: {e.response.text}")
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=503, detail=f"Network error while contacting Finnhub API: {e}")
+
+async def fetch_trading_signals(ticker: str):
+    """
+    (Placeholder) Fetches trading signals.
+    In a real implementation, this would call a dedicated internal service.
+    """
+    # This is a mock response.
+    return {
+        "ticker": ticker,
+        "signal": "buy",
+        "confidence": 0.85,
+        "analysis": "Based on recent news and market trends, the stock is expected to rise."
+    }

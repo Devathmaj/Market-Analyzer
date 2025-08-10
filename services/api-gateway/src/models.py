@@ -14,11 +14,11 @@ class Article(BaseModel):
 
 class StockQuote(BaseModel):
     """Defines the data contract for a stock quote from the external API."""
-    current_price: float = Field(alias='c')
-    high_price_of_the_day: float = Field(alias='h')
-    low_price_of_the_day: float = Field(alias='l')
-    open_price_of_the_day: float = Field(alias='o')
-    previous_close_price: float = Field(alias='pc')
+    current_price: Optional[float] = Field(alias='c')
+    high_price_of_the_day: Optional[float] = Field(alias='h')
+    low_price_of_the_day: Optional[float] = Field(alias='l')
+    open_price_of_the_day: Optional[float] = Field(alias='o')
+    previous_close_price: Optional[float] = Field(alias='pc')
 
 class AnalysisResult(BaseModel):
     """Defines the top-level response structure for the analysis endpoint."""

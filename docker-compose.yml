@@ -1,35 +1,42 @@
 version: '3.8'
 
-# This Docker Compose file sets up the local development environment.
-# It defines the services that make up the application, allowing them
-# to be run together in isolated containers.
-
 services:
-  # The API Gateway is responsible for fetching data from external sources.
-  # It provides a clean, internal API for other services.
+  postgres-db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mydatabase
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   api-gateway:
     build:
       context: ./services/api-gateway
-    # The 'env_file' loads sensitive credentials from a dedicated .env file,
-    # keeping them isolated to this service.
     env_file:
       - ./services/api-gateway/.env
-    # We don't expose ports for the gateway to the host machine,
-    # as it should only be accessible from other services within the Docker network.
-    # For debugging, you could expose it:
-    # ports:
-    #   - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydatabase
+    depends_on:
+      - postgres-db
 
-  # The Web UI is the user-facing dashboard.
-  # It calls the api-gateway to get its data.
-  web-ui:
+  web-ui-server:
     build:
-      context: ./services/web-ui
-    # This service depends on the api-gateway. 'depends_on' ensures that
-    # the api-gateway is started before the web-ui.
+      context: ./services/web-ui/server
+    ports:
+      - "8080:8080"
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8001
     depends_on:
       - api-gateway
+
+  web-ui:
+    build:
+      context: ./services/web-ui/client
     ports:
-      # Expose port 8080 on the host machine to access the web dashboard.
-      # Expose port 5000 on the host machine to access the web dashboard.
-      - "5000:5000"
+      - "5000:5173"
+    depends_on:
+      - web-ui-server

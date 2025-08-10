@@ -1,64 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import { Stock, MarketIndex, StockHistory } from '../types';
-import { getStockData, getStockHistory } from '../services/api';
+import { StockQuote } from '../types';
+import { getStockData } from '../services/api';
 import Card from '../components/Card';
-import Chart from '../components/Chart';
-import StockTicker from '../components/StockTicker';
 
 const Dashboard: React.FC = () => {
   const { selectedStock, setSelectedStock, isLoading, setIsLoading } = useAppContext();
-  const [stocks, setStocks] = useState<Stock[]>([]);
-  const [indices, setIndices] = useState<MarketIndex[]>([]);
-  const [stockHistory, setStockHistory] = useState<StockHistory[]>([]);
+  const [stockQuote, setStockQuote] = useState<StockQuote | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getStockData();
-        setStocks(data.stocks);
-        setIndices(data.indices);
-      } catch (error) {
-        console.error('Failed to load stock data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [setIsLoading]);
-
-  useEffect(() => {
-    const loadStockHistory = async () => {
       if (selectedStock) {
+        setIsLoading(true);
         try {
-          const history = await getStockHistory(selectedStock);
-          setStockHistory(history);
+          const data = await getStockData(selectedStock);
+          setStockQuote(data.quote);
         } catch (error) {
-          console.error('Failed to load stock history:', error);
+          console.error('Failed to load stock data:', error);
+        } finally {
+          setIsLoading(false);
         }
       }
     };
 
-    loadStockHistory();
-  }, [selectedStock]);
+    loadData();
+  }, [selectedStock, setIsLoading]);
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
-  const formatChange = (change: number, changePercent: number) => {
-    const sign = change >= 0 ? '+' : '';
-    return `${sign}${change.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)`;
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const newTicker = formData.get('ticker') as string;
+    setSelectedStock(newTicker);
   };
 
-  const formatMarketCap = (marketCap: number) => {
-    if (marketCap >= 1e12) {
-      return `$${(marketCap / 1e12).toFixed(2)}T`;
+  const formatPrice = (price: number | null | undefined) => {
+    if (price === null || price === undefined) {
+      return 'N/A';
     }
-    if (marketCap >= 1e9) {
-      return `$${(marketCap / 1e9).toFixed(2)}B`;
-    }
-    return `$${(marketCap / 1e6).toFixed(2)}M`;
+    return `${price.toFixed(2)}`;
   };
 
   if (isLoading) {
@@ -71,91 +51,41 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stock Ticker */}
-      <StockTicker />
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Stock Dashboard</h2>
+        <form onSubmit={handleSearch} className="flex items-center space-x-2">
+          <input
+            type="text"
+            name="ticker"
+            defaultValue={selectedStock}
+            className="px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-white"
+            placeholder="Enter stock ticker..."
+          />
+          <button
+            type="submit"
+            className="p-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+          >
+            <Search size={20} />
+          </button>
+        </form>
+      </div>
 
-      {/* Market Overview */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Market Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          {indices.map((index) => (
-            <Card key={index.symbol}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{index.name}</h3>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {formatPrice(index.value)}
-                  </p>
-                </div>
-                <div className={`flex items-center ${index.change >= 0 ? 'text-success-500' : 'text-error-500'}`}>
-                  {index.change >= 0 ? <TrendingUp size={24} /> : <TrendingDown size={24} />}
-                  <span className="ml-2 font-medium">
-                    {formatChange(index.change, index.changePercent)}
-                  </span>
-                </div>
-              </div>
-            </Card>
-          ))}
+      {stockQuote && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card title="Current Price">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(stockQuote.current_price)}</p>
+          </Card>
+          <Card title="High Price of the Day">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(stockQuote.high_price_of_the_day)}</p>
+          </Card>
+          <Card title="Low Price of the Day">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(stockQuote.low_price_of_the_day)}</p>
+          </Card>
+          <Card title="Previous Close Price">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(stockQuote.previous_close_price)}</p>
+          </Card>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Stock Chart */}
-        <Card title={`${selectedStock} Price Chart`} className="lg:col-span-2">
-          <div className="mb-4">
-            <select
-              value={selectedStock}
-              onChange={(e) => setSelectedStock(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              {stocks.map((stock) => (
-                <option key={stock.symbol} value={stock.symbol}>
-                  {stock.symbol} - {stock.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <Chart data={stockHistory} />
-        </Card>
-
-        {/* Top Stocks */}
-        <Card title="Top Stocks" className="lg:col-span-2">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-2 font-medium text-gray-900 dark:text-white">Symbol</th>
-                  <th className="text-left py-2 font-medium text-gray-900 dark:text-white">Name</th>
-                  <th className="text-right py-2 font-medium text-gray-900 dark:text-white">Price</th>
-                  <th className="text-right py-2 font-medium text-gray-900 dark:text-white">Change</th>
-                  <th className="text-right py-2 font-medium text-gray-900 dark:text-white">Market Cap</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stocks.map((stock) => (
-                  <tr
-                    key={stock.symbol}
-                    className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
-                    onClick={() => setSelectedStock(stock.symbol)}
-                  >
-                    <td className="py-3 font-bold text-gray-900 dark:text-white">{stock.symbol}</td>
-                    <td className="py-3 text-gray-600 dark:text-gray-300">{stock.name}</td>
-                    <td className="py-3 text-right font-medium text-gray-900 dark:text-white">
-                      {formatPrice(stock.price)}
-                    </td>
-                    <td className={`py-3 text-right font-medium ${stock.change >= 0 ? 'text-success-500' : 'text-error-500'}`}>
-                      {formatChange(stock.change, stock.changePercent)}
-                    </td>
-                    <td className="py-3 text-right text-gray-600 dark:text-gray-300">
-                      {formatMarketCap(stock.marketCap)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      </div>
+      )}
     </div>
   );
 };

@@ -7,8 +7,8 @@
   "news_page_size": 5,
   "news_sort_by": "popularity",
   "preferred_news_sources": [
-    "Reuters",
-    "Bloomberg",
-    "Associated Press"
+    "reuters",
+    "bloomberg",
+    "associated-press"
   ]
 }

@@ -1,4 +1,4 @@
-import { Stock, StockHistory, NewsArticle, MarketIndex, TradingSignal, AnalyticsData, UserSettings } from '../types';
+import { StockHistory, TradingSignal, AnalyticsData, UserSettings, AnalysisResult } from '../types';
 
 const API_BASE_URL = '/api';
 
@@ -10,9 +10,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function getStockData(): Promise<{ stocks: Stock[]; indices: MarketIndex[] }> {
-  const response = await fetch(`${API_BASE_URL}/stocks`);
-  return handleResponse<{ stocks: Stock[]; indices: MarketIndex[] }>(response);
+export async function getStockData(ticker: string): Promise<AnalysisResult> {
+  const response = await fetch(`${API_BASE_URL}/stocks/${ticker}`);
+  return handleResponse<AnalysisResult>(response);
 }
 
 export async function getStockHistory(symbol: string): Promise<StockHistory[]> {
@@ -20,9 +20,9 @@ export async function getStockHistory(symbol: string): Promise<StockHistory[]> {
   return handleResponse<StockHistory[]>(response);
 }
 
-export async function getMarketNews(): Promise<NewsArticle[]> {
-  const response = await fetch(`${API_BASE_URL}/news`);
-  return handleResponse<NewsArticle[]>(response);
+export async function getMarketNews(keyword: string): Promise<AnalysisResult> {
+  const response = await fetch(`${API_BASE_URL}/news/${keyword}`);
+  return handleResponse<AnalysisResult>(response);
 }
 
 export async function getAnalyticsData(): Promise<AnalyticsData> {

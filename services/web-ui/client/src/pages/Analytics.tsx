@@ -170,7 +170,7 @@ const Analytics: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {analytics.trendingStocks.map((stock) => (
+              {analytics.trendingStocks.map((stock: any) => (
                 <tr key={stock.symbol} className="border-b border-gray-100 dark:border-gray-700">
                   <td className="py-3 font-bold text-gray-900 dark:text-white">{stock.symbol}</td>
                   <td className="py-3 text-gray-600 dark:text-gray-300">{stock.name}</td>
